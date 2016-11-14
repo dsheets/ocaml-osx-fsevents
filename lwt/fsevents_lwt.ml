@@ -30,7 +30,7 @@ type t = {
 let create ?since latency flags paths =
   let stream, push = Lwt_stream.create () in
   let import path flags id = Lwt_preemptive.run_in_main (fun () ->
-    push (Some { path; flags; id; });
+    (try push (Some { path; flags; id; }) with Lwt_stream.Closed -> ());
     Lwt.return_unit
   ) in
   let event_stream = Fsevents.create ?since latency flags import paths in
@@ -57,4 +57,11 @@ let invalidate { event_stream; push } =
   Fsevents.invalidate event_stream;
   push None
 
-let release { event_stream } = Fsevents.release event_stream
+let release { event_stream } =
+  Lwt.async Lwt.Infix.(fun () ->
+    Lwt_unix.sleep 5.
+    >>= fun () ->
+    Fsevents.release event_stream;
+    Lwt.return_unit
+  )
+
