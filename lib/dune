@@ -2,7 +2,7 @@
   (name        fsevents)
   (public_name fsevents)
   (libraries   ctypes.stubs cf)
-  (c_library_flags -framework CoreServices)
+  (c_library_flags -framework CoreServices -L/usr/local/lib)
   (c_names     fsevents_stubs))
 
 (rule (copy# ../lib_gen/types.ml types.ml))
