@@ -1,8 +1,8 @@
 (library
   (name        fsevents)
   (public_name fsevents)
-  (libraries   ctypes.stubs cf)
-  (c_library_flags -framework CoreServices -L/usr/local/lib)
+  (libraries   ctypes.stubs ctypes.foreign cf)
+  (c_library_flags -framework CoreServices)
   (c_names     fsevents_stubs))
 
 (rule (copy# ../lib_gen/types.ml types.ml))
